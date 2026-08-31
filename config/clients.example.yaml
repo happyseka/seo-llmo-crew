@@ -1,0 +1,72 @@
+# =============================================================
+# クライアントサイト設定ファイル（サンプル）
+# =============================================================
+# このファイルをコピーして config/clients.yaml を作成してください。
+# クライアントを追加する場合は、この "- id: client_a" のブロックを
+# コピー＆ペーストして増やすだけでOKです（コードの変更は不要です）。
+#
+# 実際のパスワードやAPIキーはこのファイルには書きません。
+# すべて .env ファイル（もしくはGitHub Secrets）に、
+# ここで指定した "env_prefix" を使った名前で保存します。
+# 例）env_prefix: CLIENT_A の場合
+#   CLIENT_A_WP_APP_PASSWORD=xxxxxxxx
+#   CLIENT_A_GA4_PROPERTY_ID=123456789
+# のように .env に書きます。詳しくはセットアップガイドを参照してください。
+# =============================================================
+
+clients:
+  - id: client_a                     # 社内で使う識別名（半角英数・アンダースコアのみ）
+    display_name: "株式会社サンプル"    # レポートメールなどに表示される名前
+    active: true                     # false にするとこのクライアントはスキップされる
+
+    # --- サイト情報 ---
+    site_url: "https://example.com"
+    wp_username: "editor-bot"        # WordPressのユーザー名（本文投稿用アカウント）
+    env_prefix: "CLIENT_A"           # .env内のキー名の接頭辞
+
+    # --- コンテンツ方針 ---
+    industry: "美容・スキンケア"
+    target_audience: "20〜30代女性、スキンケア初心者"
+    brand_tone: "親しみやすく、専門用語は噛み砕いて説明する。です・ます調。"
+    primary_keywords:
+      - "毛穴 ケア 方法"
+      - "乾燥肌 スキンケア 順番"
+      - "敏感肌 化粧水 選び方"
+    forbidden_topics:
+      - "医薬品の効能を断定する表現"
+      - "競合他社名の言及"
+    default_category: "スキンケアコラム"
+
+    # --- 公開・スケジュール設定 ---
+    # 毎月末に「翌月分」の記事をまとめて作成し、WordPressの「予約投稿」機能で
+    # 指定した曜日・時刻に自動公開されるよう設定します（記事は下書きではなく予約投稿になります）。
+    post_status: "future"            # "future"=予約投稿（推奨）。"draft"にすると予約せず下書き保存のみ
+    posts_per_week: 3                # 目安（publish_weekdaysを省略した場合、この数から曜日を自動選択）
+    publish_weekdays: ["mon", "wed", "fri"]   # 投稿する曜日（mon/tue/wed/thu/fri/sat/sun）
+    publish_time: "10:00"            # 予約投稿する時刻（日本時間、24時間表記）
+    rewrite_max_per_month: 3         # 月次リライトで対応する記事数の上限
+
+    # --- 通知先 ---
+    notify_email: "erika82.1213@gmail.com"
+
+    # --- アナリティクス ---
+    ga4_property_id: "123456789"     # Google Analytics 4 のプロパティID
+    gsc_site_url: "https://example.com/"  # Search Console に登録したプロパティURL
+
+  # - id: client_b
+  #   display_name: "株式会社サンプルB"
+  #   active: true
+  #   site_url: "https://example-b.com"
+  #   wp_username: "editor-bot"
+  #   env_prefix: "CLIENT_B"
+  #   industry: "..."
+  #   target_audience: "..."
+  #   brand_tone: "..."
+  #   primary_keywords: []
+  #   forbidden_topics: []
+  #   default_category: "コラム"
+  #   post_status: "draft"
+  #   posts_per_week: 3
+  #   notify_email: "erika82.1213@gmail.com"
+  #   ga4_property_id: ""
+  #   gsc_site_url: ""

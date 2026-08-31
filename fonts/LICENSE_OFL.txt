@@ -1,0 +1,5 @@
+このフォント (NotoSansJP-Variable.ttf) は Google の Noto Fonts プロジェクトによる
+「Noto Sans JP」で、SIL Open Font License 1.1 のもとで配布されています。
+商用・非商用問わず自由に利用・再配布が可能なライセンスです。
+配布元: https://github.com/googlefonts/noto-cjk
+ライセンス全文: https://openfontlicense.org/

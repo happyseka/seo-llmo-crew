@@ -1,0 +1,17 @@
+# 秘密情報・生成物はGitHubに上げない
+# ※ config/clients.yaml にはパスワード等は含まれないため、GitHub Actionsから読めるよう
+#   あえてコミット対象にしています（非公開リポジトリ内でのみ管理してください）。
+.env
+config/secrets/
+*.log
+logs/
+output/
+__pycache__/
+*.pyc
+.venv/
+venv/
+.DS_Store
+
+# docs/previews/ は外部確認用プレビューページの生成物なので、GitHub Actionsが
+# コミットして公開する（GitHub Pages）。ローカルのテスト生成物だけ除外したい場合は
+# 個別に `git rm --cached` してください。

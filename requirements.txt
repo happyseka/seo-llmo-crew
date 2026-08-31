@@ -1,0 +1,14 @@
+# SEO/LLMO記事自動化システム 依存パッケージ
+# GitHub Actions上で `pip install -r requirements.txt` として自動インストールされます。
+
+crewai>=1.15.0,<2.0.0
+requests>=2.31.0
+python-dotenv>=1.0.0
+PyYAML>=6.0.0
+Pillow>=11.0.0
+
+# Google Analytics 4 / Search Console 連携
+google-analytics-data>=0.22.0
+google-api-python-client>=2.150.0
+google-auth>=2.35.0
+google-auth-httplib2>=0.2.0
