@@ -1,0 +1,54 @@
+name: セットアップ確認（動作チェック）
+
+# 記事作成を始める前に、手動でいつでも実行できる「設定チェック」ワークフローです。
+# GitHubの「Actions」タブ → 本ワークフロー → 「Run workflow」ボタンで実行してください。
+# WordPress・メール・Google Analytics/Search Consoleへの接続確認を行い、
+# 結果をログに一覧表示します（実際に記事は作成しません）。
+on:
+  workflow_dispatch: {}
+
+jobs:
+  check-setup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: リポジトリを取得
+        uses: actions/checkout@v4
+
+      - name: Pythonをセットアップ
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: 依存パッケージをインストール
+        run: pip install -r requirements.txt
+
+      - name: Googleサービスアカウント鍵を復元 (CLIENT_A)
+        if: ${{ secrets.CLIENT_A_GOOGLE_SERVICE_ACCOUNT_JSON != '' }}
+        run: |
+          mkdir -p config/secrets
+          echo "$SA_JSON" > config/secrets/client_a_google_service_account.json
+        env:
+          SA_JSON: ${{ secrets.CLIENT_A_GOOGLE_SERVICE_ACCOUNT_JSON }}
+
+      # - name: Googleサービスアカウント鍵を復元 (CLIENT_B)
+      #   if: ${{ secrets.CLIENT_B_GOOGLE_SERVICE_ACCOUNT_JSON != '' }}
+      #   run: |
+      #     mkdir -p config/secrets
+      #     echo "$SA_JSON" > config/secrets/client_b_google_service_account.json
+      #   env:
+      #     SA_JSON: ${{ secrets.CLIENT_B_GOOGLE_SERVICE_ACCOUNT_JSON }}
+
+      - name: 設定チェックを実行
+        run: python scripts/check_setup.py
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          PREVIEW_BASE_URL: ${{ vars.PREVIEW_BASE_URL }}
+          NOTIFY_SMTP_HOST: ${{ vars.NOTIFY_SMTP_HOST || 'smtp.gmail.com' }}
+          NOTIFY_SMTP_PORT: ${{ vars.NOTIFY_SMTP_PORT || '587' }}
+          NOTIFY_SMTP_USER: ${{ secrets.NOTIFY_SMTP_USER }}
+          NOTIFY_SMTP_APP_PASSWORD: ${{ secrets.NOTIFY_SMTP_APP_PASSWORD }}
+          CLIENT_A_WP_APP_PASSWORD: ${{ secrets.CLIENT_A_WP_APP_PASSWORD }}
+          CLIENT_A_GOOGLE_SERVICE_ACCOUNT_JSON: config/secrets/client_a_google_service_account.json
+          # CLIENT_B_WP_APP_PASSWORD: ${{ secrets.CLIENT_B_WP_APP_PASSWORD }}
+          # CLIENT_B_GOOGLE_SERVICE_ACCOUNT_JSON: config/secrets/client_b_google_service_account.json
