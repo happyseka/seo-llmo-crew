@@ -1,0 +1,86 @@
+name: 月次記事サイクル（作成・改善・報告）
+
+# 実行タイミング:
+#   毎月25日 22:00 UTC = 26日 07:00 JST に自動実行。
+#   月末までに数日の余裕を持たせ、予約投稿の内容を確認・修正する時間を確保しています。
+#   日時を変更したい場合は下の cron の値を編集してください（UTC基準です）。
+# 手動実行:
+#   GitHubの「Actions」タブ → 本ワークフロー → 「Run workflow」ボタンでいつでも実行できます。
+on:
+  schedule:
+    - cron: "0 22 25 * *"
+  workflow_dispatch:
+    inputs:
+      client:
+        description: "対象クライアントID（未入力なら全クライアント）"
+        required: false
+        default: "all"
+
+permissions:
+  contents: write  # 生成したプレビューページをリポジトリにコミットするために必要
+
+jobs:
+  run-monthly-cycle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - name: リポジトリを取得
+        uses: actions/checkout@v4
+
+      - name: Pythonをセットアップ
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: 依存パッケージをインストール
+        run: pip install -r requirements.txt
+
+      # ---------------------------------------------------------------
+      # クライアントごとのGoogleサービスアカウント鍵を、Secretsから復元する
+      # クライアントを追加した場合は、このブロックをコピーして増やしてください
+      # （config/clients.yaml の env_prefix と合わせること）
+      # ---------------------------------------------------------------
+      - name: Googleサービスアカウント鍵を復元 (CLIENT_A)
+        if: ${{ secrets.CLIENT_A_GOOGLE_SERVICE_ACCOUNT_JSON != '' }}
+        run: |
+          mkdir -p config/secrets
+          echo "$SA_JSON" > config/secrets/client_a_google_service_account.json
+        env:
+          SA_JSON: ${{ secrets.CLIENT_A_GOOGLE_SERVICE_ACCOUNT_JSON }}
+
+      # - name: Googleサービスアカウント鍵を復元 (CLIENT_B)
+      #   if: ${{ secrets.CLIENT_B_GOOGLE_SERVICE_ACCOUNT_JSON != '' }}
+      #   run: |
+      #     mkdir -p config/secrets
+      #     echo "$SA_JSON" > config/secrets/client_b_google_service_account.json
+      #   env:
+      #     SA_JSON: ${{ secrets.CLIENT_B_GOOGLE_SERVICE_ACCOUNT_JSON }}
+
+      - name: 月次サイクルを実行
+        run: python main.py monthly-cycle --client "${{ github.event.inputs.client || 'all' }}"
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          CREW_MODEL: ${{ vars.CREW_MODEL || 'anthropic/claude-sonnet-4-5-20250929' }}
+          PREVIEW_BASE_URL: ${{ vars.PREVIEW_BASE_URL }}
+          NOTIFY_SMTP_HOST: ${{ vars.NOTIFY_SMTP_HOST || 'smtp.gmail.com' }}
+          NOTIFY_SMTP_PORT: ${{ vars.NOTIFY_SMTP_PORT || '587' }}
+          NOTIFY_SMTP_USER: ${{ secrets.NOTIFY_SMTP_USER }}
+          NOTIFY_SMTP_APP_PASSWORD: ${{ secrets.NOTIFY_SMTP_APP_PASSWORD }}
+          NOTIFY_FROM_NAME: "SEO記事自動投稿システム"
+          # クライアントごとの認証情報（クライアントを追加したら下に追記してください）
+          CLIENT_A_WP_APP_PASSWORD: ${{ secrets.CLIENT_A_WP_APP_PASSWORD }}
+          CLIENT_A_GOOGLE_SERVICE_ACCOUNT_JSON: config/secrets/client_a_google_service_account.json
+          # CLIENT_B_WP_APP_PASSWORD: ${{ secrets.CLIENT_B_WP_APP_PASSWORD }}
+          # CLIENT_B_GOOGLE_SERVICE_ACCOUNT_JSON: config/secrets/client_b_google_service_account.json
+
+      - name: 生成されたプレビューページをコミット
+        run: |
+          git config user.name "seo-llmo-crew-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add docs/previews/ || true
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: 予約投稿記事のプレビューページを追加 ($(date -u +'%Y-%m-%d'))"
+            git push
+          else
+            echo "コミットする変更はありませんでした。"
+          fi
