@@ -8,7 +8,7 @@ clients:
 
     # --- サイト情報 ---
     site_url: "https://wish-wish.com"
-    wp_username: "totonoeDplus"
+    wp_username: "admin@eirkarie.info"
     env_prefix: "CLIENT_A"
 
     # --- コンテンツ方針 ---
