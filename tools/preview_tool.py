@@ -132,7 +132,7 @@ def build_preview_url(relative_path: str) -> str:
 # ---------------------------------------------------------------------
 
 def build_preview_tools(client_id: str) -> list:
-    @tool("外部確認用プレビューページ生成ツール")
+    @tool("generate_preview_page")
     def generate_preview_tool(
         title: str,
         content_html: str,
