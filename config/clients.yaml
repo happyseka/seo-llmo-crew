@@ -7,7 +7,7 @@ clients:
     active: true
 
     # --- サイト情報 ---
-    site_url: "https://wish-wish.com/2026"
+    site_url: "https://wish-wish.com"
     wp_username: "totonoeDplus"
     env_prefix: "CLIENT_A"
 
