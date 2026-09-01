@@ -254,7 +254,7 @@ def build_wordpress_tools(client: ClientConfig) -> list:
     「画像をアップロードして」「記事を公開して」と判断・実行できるようになる。
     """
 
-    @tool("WordPress予約投稿ツール")
+    @tool("schedule_wordpress_post")
     def schedule_wordpress_post_tool(
         title: str,
         html_content: str,
@@ -302,7 +302,7 @@ def build_wordpress_tools(client: ClientConfig) -> list:
 def build_update_tool(client: ClientConfig, post_id: int) -> list:
     """特定の投稿ID専用の更新ツール（記事改善／リライト用に、対象記事を固定してバインドする）。"""
 
-    @tool("WordPress記事更新ツール")
+    @tool("update_wordpress_post")
     def update_wordpress_post_tool(new_title: str, new_content_html: str) -> str:
         """
         リライトした内容で、対象のWordPress記事（あらかじめ指定された1記事）を上書き更新する。
@@ -324,7 +324,7 @@ def build_update_tool(client: ClientConfig, post_id: int) -> list:
 def build_research_tools(client: ClientConfig) -> list:
     """リサーチャーが話題の重複を避けるために、既存記事のタイトル一覧を取得できるツール。"""
 
-    @tool("既存記事タイトル一覧取得ツール")
+    @tool("get_recent_titles")
     def get_recent_titles_tool(count: int = 15) -> str:
         """
         サイトに既に投稿されている直近の記事タイトル一覧を取得する。
