@@ -296,7 +296,7 @@ def generate_section_illustration(
 def build_image_tools(client_display_name: str, output_dir: str, accent_color: str | None = None) -> list:
     """編集者エージェントが記事タイトルからアイキャッチ・挿絵を自律生成できるようにするツール。"""
 
-    @tool("アイキャッチ画像生成ツール")
+    @tool("generate_eyecatch_image")
     def generate_eyecatch_tool(title: str, category_label: str = "") -> str:
         """
         記事タイトルからアイキャッチ画像（1200x630）をAIを使わずに自動生成し、ローカルに保存する。
@@ -312,7 +312,7 @@ def build_image_tools(client_display_name: str, output_dir: str, accent_color: s
             accent_color=accent_color, category_label=category_label,
         )
 
-    @tool("挿絵生成ツール")
+    @tool("generate_illustration")
     def generate_illustration_tool(label: str) -> str:
         """
         記事本文の途中に挟む挿絵（装飾用の抽象画像）をAIを使わずに自動生成する。
