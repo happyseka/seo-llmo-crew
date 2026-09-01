@@ -150,7 +150,7 @@ def notify_work_report(
 def build_email_tools(client_display_name: str, notify_email: str) -> list:
     """アナリスト等のエージェントが、作成した報告文をそのままメール送信できるようにするツール。"""
 
-    @tool("作業報告メール送信ツール")
+    @tool("send_report_email")
     def send_report_email_tool(subject: str, body_text: str) -> str:
         """
         作成した作業報告・分析レポートの文章を、担当者宛にメールで送信する。
