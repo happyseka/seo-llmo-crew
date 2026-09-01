@@ -24,7 +24,6 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Googleサービスアカウント鍵を復元 (CLIENT_A)
-        if: ${{ secrets.CLIENT_A_GOOGLE_SERVICE_ACCOUNT_JSON != '' }}
         run: |
           mkdir -p config/secrets
           echo "$SA_JSON" > config/secrets/client_a_google_service_account.json
@@ -32,7 +31,6 @@ jobs:
           SA_JSON: ${{ secrets.CLIENT_A_GOOGLE_SERVICE_ACCOUNT_JSON }}
 
       # - name: Googleサービスアカウント鍵を復元 (CLIENT_B)
-      #   if: ${{ secrets.CLIENT_B_GOOGLE_SERVICE_ACCOUNT_JSON != '' }}
       #   run: |
       #     mkdir -p config/secrets
       #     echo "$SA_JSON" > config/secrets/client_b_google_service_account.json
