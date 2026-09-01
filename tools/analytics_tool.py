@@ -284,7 +284,7 @@ def build_analytics_tools(
 ) -> list:
     """アナリストエージェントが、指定された対象期間のアナリティクスデータを取得できるようにするツール。"""
 
-    @tool("アナリティクスレポート取得ツール")
+    @tool("get_analytics_report")
     def get_analytics_report_tool() -> str:
         """
         Google AnalyticsとSearch Consoleから、今回の対象期間（先月分）のサイトパフォーマンスを取得し、
