@@ -20,7 +20,7 @@ from src.config_loader import ClientConfig
 
 def get_llm(temperature: float = 0.7) -> LLM:
     model = os.environ.get("CREW_MODEL", "anthropic/claude-sonnet-4-5-20250929")
-    return LLM(model=model, temperature=temperature)
+    return LLM(model=model, temperature=temperature, is_litellm=True)
 
 
 def build_researcher(client: ClientConfig, tools: list | None = None) -> Agent:
