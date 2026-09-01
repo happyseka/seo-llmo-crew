@@ -1,0 +1,56 @@
+# =============================================================
+# クライアントサイト設定ファイル
+# =============================================================
+clients:
+  - id: client_a
+    display_name: "wish a wish"
+    active: true
+
+    # --- サイト情報 ---
+    site_url: "https://wish-wish.com/2026"
+    wp_username: "totonoeDplus"
+    env_prefix: "CLIENT_A"
+
+    # --- コンテンツ方針 ---
+    industry: "骨格ベクトレ・骨格調整（美容整体）"
+    target_audience: "身体の不調がある女性、体のバランスを整えたい女性、若々しく美しく健康でありたい女性（沖縄県内）"
+    brand_tone: "親しみやすく、温かみのある丁寧な文体。専門用語は噛み砕いて説明する。です・ます調。"
+    primary_keywords:
+      - "骨格ベクトレ"
+      - "沖縄 整体"
+      - "美容整体"
+    forbidden_topics:
+      - "医療的な効能・治療効果を断定する表現（医療機関ではないため）"
+    default_category: "コラム"
+
+    # --- 公開・スケジュール設定 ---
+    post_status: "future"
+    posts_per_week: 3
+    publish_weekdays: ["mon", "wed", "fri"]
+    publish_time: "10:00"
+    rewrite_max_per_month: 3
+
+    # --- 通知先 ---
+    notify_email: "erika82.1213@gmail.com"
+
+    # --- アナリティクス ---
+    ga4_property_id: "540046393"
+    gsc_site_url: "https://wish-wish.com/"
+
+  # - id: client_b
+  #   display_name: "株式会社サンプルB"
+  #   active: true
+  #   site_url: "https://example-b.com"
+  #   wp_username: "editor-bot"
+  #   env_prefix: "CLIENT_B"
+  #   industry: "..."
+  #   target_audience: "..."
+  #   brand_tone: "..."
+  #   primary_keywords: []
+  #   forbidden_topics: []
+  #   default_category: "コラム"
+  #   post_status: "draft"
+  #   posts_per_week: 3
+  #   notify_email: "erika82.1213@gmail.com"
+  #   ga4_property_id: ""
+  #   gsc_site_url: ""
